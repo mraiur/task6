@@ -3,3 +3,11 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+  p Show links for demo:
+    ul
+      li
+        a(href='/products')= 'List all products'
+
+      each cat in categories
+        li
+          a(href='/categories/'+cat.id)='List products in category : ' + cat.name
