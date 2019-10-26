@@ -1,10 +1,24 @@
-let express = require('express');
-let router = express.Router();
-let Database = require('../library/Database');
-let ProductValidator = require('./validators/products');
+const express = require('express');
+const router = express.Router();
+const Database = require('../library/Database');
+const ProductValidator = require('./validators/products');
+const VATRates = require('vatrates');
+const vatRates = new VATRates();
+const countryCode = 'BG';
+const vatRatePercent = vatRates.getStandardRate(countryCode);
 
+function priceWithVAT(price)
+{
+  return price * (1 + (1/vatRatePercent));
+}
+console.log(`example vat rate for country: ${countryCode}: ${vatRatePercent}` );
 router.get('/', function(req, res, next) {
+
   const products = Database.getAllProducts();
+  products.forEach(product=>{
+    let price = parseFloat(product.price);
+    product.priceVat = priceWithVAT(price );
+  });
   res.json(products);
 });
 
@@ -12,6 +26,7 @@ router.post('/', ProductValidator.productData, function(req, res) {
   let product = Database.createProduct(req.body);
   if( product )
   {
+    product.priceVat = priceWithVAT(price );
     return res.json(product);
   }
   return res.json({success: false, message: 'Problem creating product'});
@@ -22,7 +37,9 @@ router.put('/:id', ProductValidator.productData, function(req, res) {
   let data = req.body;
   if( Database.updateProduct(id, data) )
   {
-    return res.json(Database.getProduct(id));
+    let product = Database.getProduct(id);
+    product.priceVat = priceWithVAT(price );
+    return res.json(product);
   }
   //TODO better error handling
   return res.json({success: false, message: 'Problem updating product'});
