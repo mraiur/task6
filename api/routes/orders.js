@@ -1,15 +1,16 @@
-let express = require('express');
-let router = express.Router();
-let Database = require('../library/Database');
-let OrderValidator = require('./validators/orders');
+const express = require('express');
+const router = express.Router();
+const Database = require('../library/Database');
+const OrderValidator = require('./validators/orders');
+const AuthValidator = require('./validators/auth');
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
+router.get('/', AuthValidator.isAuth, function(req, res, next) {
   const orders = Database.getAllOrders();
   res.json(orders);
 });
 
-router.post('/', OrderValidator.orderData, function(req, res) {
+router.post('/', AuthValidator.isAuth, OrderValidator.orderData, function(req, res) {
   let order = Database.createOrder(req.body);
   if( order )
   {
@@ -18,7 +19,7 @@ router.post('/', OrderValidator.orderData, function(req, res) {
   return res.json({success: false, message: 'Problem creating order'});
 });
 
-router.put('/:id', OrderValidator.statusChange, function(req, res) {
+router.put('/:id', AuthValidator.isAuth, OrderValidator.statusChange, function(req, res) {
   let id = parseInt(req.params.id, 10);
   let data = req.body;
   if( Database.updateOrderStatus(id, data.status) )

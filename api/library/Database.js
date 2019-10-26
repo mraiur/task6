@@ -19,6 +19,15 @@ let getOrderId = function(){
 };
 
 //TODO Convert to Typescript and create a interface for category, product, order and user. To ensure data consistency.
+let users = [
+	{
+		id: 1,
+		username: 'test',
+		//TODO dont store as plain text EVER
+		password: 'test'
+	}
+];
+
 let categories = {
 	1 : {
 		id: 1,
@@ -189,7 +198,16 @@ class Database{
 		return true;
 	}
 
-	checkLogin(username, password){}
+	getUserByCredentials(username, password){
+		let user = null;
+		users.forEach( (item) => {
+			if( item.username === username && item.password === password)
+			{
+				user = item;
+			}
+		});
+		return user;
+	}
 
 	disconnect(){
 		//TODO cleanup DB connections

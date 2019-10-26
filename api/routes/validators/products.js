@@ -4,7 +4,6 @@ module.exports = {
 
 		let data = req.body;
 		let errors = [];
-		console.log("data", data);
 
 		if( !data.name || data.name.length <= 3)
 		{
