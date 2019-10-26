@@ -6,8 +6,8 @@ block content
   p Show links for demo:
     ul
       li
-        a(href='/products')= 'List all products'
+        a(href='/v1/products')= 'List all products'
 
       each cat in categories
         li
-          a(href='/categories/'+cat.id)='List products in category : ' + cat.name
+          a(href='/v1/categories/'+cat.id)='List products in category : ' + cat.name

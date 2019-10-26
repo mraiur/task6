@@ -100,19 +100,20 @@ class Database{
 		{
 			//delete productsById[id];
 			// Get index in array of products
-			let index;
+			let index = null;
 			products.forEach( (product, i) => {
 				if( product.id === id )
 				{
+					console.log(index,"-",i );
 					index = i;
 				}
 			});
 
-			if(index)
+			if(index !== null)
 			{
 				products.splice(index, 1);
+				return true;
 			}
-			return true;
 		}
 		return false;
 	}
