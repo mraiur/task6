@@ -1,0 +1,32 @@
+.games-grid-container
+{
+	.container {
+		.category-card{
+			.games
+			{
+				.main-game-container{
+					.card
+					{
+						.card-body{
+							.card-title{
+								font-size: 3rem;
+							}
+						}
+					}
+				}
+
+				.games-container
+				{
+					.card
+					{
+						.card-body{
+							.card-title{
+								font-size: 1rem;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
