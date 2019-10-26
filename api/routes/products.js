@@ -18,7 +18,6 @@ router.post('/', ProductValidator.productData, function(req, res) {
 });
 
 router.put('/:id', ProductValidator.productData, function(req, res) {
-  //TODO validate data before update
   let id = parseInt(req.params.id, 10);
   let data = req.body;
   if( Database.updateProduct(id, data) )

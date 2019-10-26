@@ -1,6 +1,23 @@
 const Enums = require('../enum/OrderStatus');
 const _ = require('lodash');
 
+//TODO make category linking to be based on primary id instead of category name
+let categoriesByName = {};
+let productsById = {};
+let ordersById = {};
+let productIdCounter = 0;
+let orderIdCounter = 0;
+
+let getProductId = function(){
+	productIdCounter++;
+	return productIdCounter;
+};
+
+let getOrderId = function(){
+	orderIdCounter++;
+	return orderIdCounter;
+};
+
 //TODO Convert to Typescript and create a interface for category, product, order and user. To ensure data consistency.
 let categories = {
 	1 : {
@@ -13,35 +30,12 @@ let categories = {
 	}
 };
 
-// Testing Only
-let categoriesByName = {};
 for (let [id, row] of Object.entries(categories))
 {
 	categoriesByName[row.name] = row;
 }
 
-let orders = [
-	{
-		"id": 1,
-		"date": "2018-05-29",
-		"products": [1, 2],
-		"status": "Delivered"
-	},
-	{
-		"id": 2,
-		"date": "2018-05-30",
-		"products": [1],
-		"status": "Pending"
-	}
-];
 
-//TODO make category linking to be based on primary id instead of category name
-let productsById = {};
-let productIdCounter = 0;
-let getProductId = function(){
-	productIdCounter++;
-	return productIdCounter;
-};
 let products = [
 	{
 		"id": getProductId(),
@@ -59,6 +53,28 @@ let products = [
 products.forEach( (product) => {
 	productsById[product.id] = product;
 });
+
+let orders = [
+	{
+		"id": getOrderId(),
+		"date": "2018-05-29",
+		"products": [1, 2],
+		"status": "Delivered"
+	},
+	{
+		"id": getOrderId(),
+		"date": "2018-05-30",
+		"products": [1],
+		"status": "Pending"
+	}
+];
+
+orders.forEach( (order) => {
+	ordersById[order.id] = order;
+});
+
+
+
 
 class Database{
 	connect(){
@@ -128,6 +144,10 @@ class Database{
 		return productsById.hasOwnProperty(id);
 	}
 
+	hasOrder(id){
+		return ordersById.hasOwnProperty(id);
+	}
+
 	getProduct(id){
 		if( this.hasProduct(id))
 		{
@@ -139,6 +159,34 @@ class Database{
 	getProductsByCategory(categoryId){
 		let category = this.getCategoryById(categoryId);
 		return products.filter( item => item.category === category.name);
+	}
+
+
+	getAllOrders(){
+		return orders;
+	}
+
+	getOrder(id){
+		if( this.hasOrder(id) )
+		{
+			return ordersById[id];
+		}
+		return null;
+	}
+
+	createOrder(data){
+		data.id = getOrderId();
+		// Could use moment if required
+		let today = new Date();
+		data.date = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+
+		let len = orders.push(data);
+		return orders[len-1];
+	}
+
+	updateOrderStatus(id, status){
+		ordersById[id].status = status;
+		return true;
 	}
 
 	checkLogin(username, password){}
