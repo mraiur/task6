@@ -18,7 +18,7 @@ module.exports = {
 
 		if(errors.length>0)
 		{
-			return res.send({success: false, validation: errors});
+			return res.status(400).send({success: false, validation: errors});
 		}
 		next();
 	},
@@ -34,7 +34,7 @@ module.exports = {
 
 		if(errors.length>0)
 		{
-			return res.send({success: false, validation: errors});
+			return res.status(400).send({success: false, validation: errors});
 		}
 		next();
 	}

@@ -19,11 +19,10 @@ module.exports = {
 		{
 			errors.push({field: 'category', message: `Missing or invalid category: ${data.category}`})
 		}
-		console.log("errors", errors, parseFloat(data.price));
 
 		if(errors.length>0)
 		{
-			return res.send({success: false, validation: errors});
+			return res.status(400).send({success: false, validation: errors});
 		}
 		next();
 	}

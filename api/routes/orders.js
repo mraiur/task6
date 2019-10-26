@@ -16,7 +16,7 @@ router.post('/', AuthValidator.isAuth, OrderValidator.orderData, function(req, r
   {
     return res.json(order);
   }
-  return res.json({success: false, message: 'Problem creating order'});
+  return res.status(400).json({success: false, message: 'Problem creating order'});
 });
 
 router.put('/:id', AuthValidator.isAuth, OrderValidator.statusChange, function(req, res) {
@@ -26,7 +26,7 @@ router.put('/:id', AuthValidator.isAuth, OrderValidator.statusChange, function(r
   {
     return res.json(Database.getOrder(id));
   }
-  return res.json({success: false, message: 'Problem updating order status'});
+  return res.status(400).json({success: false, message: 'Problem updating order status'});
 });
 
 

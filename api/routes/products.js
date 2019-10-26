@@ -28,7 +28,7 @@ router.post('/', AuthValidator.isAuth, ProductValidator.productData, function(re
   if( product )
   {
     product.priceVat = priceWithVAT( product.price );
-    return res.json(product);
+    return res.status(201).json(product);
   }
   return res.json({success: false, message: 'Problem creating product'});
 });
@@ -40,19 +40,19 @@ router.put('/:id', AuthValidator.isAuth, ProductValidator.productData, function(
   {
     let product = Database.getProduct(id);
     product.priceVat = priceWithVAT( product.price );
-    return res.json(product);
+    return res.status(200).json(product);
   }
   //TODO better error handling
-  return res.json({success: false, message: 'Problem updating product'});
+  return res.status(400).json({success: false, message: 'Problem updating product'});
 });
 
 router.delete('/:id', AuthValidator.isAuth, function(req, res) {
   let id = parseInt(req.params.id, 10);
   if( Database.deleteProduct(id) )
   {
-    return res.json({success: true, message: `Deleted product with id : ${id}`});
+    return res.status(200).json({success: true, message: `Deleted product with id : ${id}`});
   }
-  return res.json({success: false, message: 'Problem deleting product'});
+  return res.status(400).json({success: false, message: 'Problem deleting product'});
 });
 
 module.exports = router;

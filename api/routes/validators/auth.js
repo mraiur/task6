@@ -7,6 +7,7 @@ module.exports = {
 		}
 		else
 		{
+			res.status(401);
 			return res.send({success: false, message: 'Not logged in!'});
 		}
 	},
